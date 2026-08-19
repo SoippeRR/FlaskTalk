@@ -1,0 +1,190 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    height: 100vh;
+}
+
+.auth-box {
+    max-width: 340px;
+    margin: 100px auto;
+    background: #fff;
+    padding: 30px;
+    border: 1px solid #ccc;
+}
+
+.auth-box h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.auth-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: normal;
+    color: #555;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 10px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.auth-box button:hover {
+    background: #000;
+}
+
+.auth-box p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.error {
+    background: #fdd;
+    color: #900;
+    padding: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: #fff;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.logout {
+    font-size: 12px;
+    color: #900;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.current-user {
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+.user-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.user-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.user-item:hover {
+    background: #f5f5f5;
+}
+
+.user-item.active {
+    background: #e0e0e0;
+}
+
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 15px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #fafafa;
+}
+
+.message {
+    max-width: 60%;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+}
+
+.message .time {
+    font-size: 11px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.message.mine {
+    margin-left: auto;
+    background: #dcefff;
+}
+
+.message.theirs {
+    margin-right: auto;
+    background: #fff;
+}
+
+.send-form {
+    display: flex;
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #ccc;
+}
+
+.send-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.send-form button {
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.send-form button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
