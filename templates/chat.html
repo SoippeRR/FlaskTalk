@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskTalk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span>FlaskTalk</span>
+                <a href="{{ url_for('logout') }}" class="logout">Выход</a>
+            </div>
+            <div class="current-user">Вы: {{ username }}</div>
+            <div id="user-list" class="user-list"></div>
+        </div>
+        <div class="chat-area">
+            <div id="chat-header" class="chat-header">Выберите собеседника</div>
+            <div id="messages" class="messages"></div>
+            <form id="send-form" class="send-form">
+                <input type="text" id="message-input" placeholder="Введите сообщение..." autocomplete="off" disabled>
+                <button type="submit" disabled>Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const currentUsername = "{{ username }}";
+        let selectedUserId = null;
+        let selectedUsername = null;
+
+        const userList = document.getElementById("user-list");
+        const chatHeader = document.getElementById("chat-header");
+        const messagesBox = document.getElementById("messages");
+        const sendForm = document.getElementById("send-form");
+        const messageInput = document.getElementById("message-input");
+        const sendButton = sendForm.querySelector("button");
+
+        function selectUser(id, username, el) {
+            selectedUserId = id;
+            selectedUsername = username;
+            chatHeader.textContent = username;
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+
+            document.querySelectorAll(".user-item").forEach(item => item.classList.remove("active"));
+            if (el) el.classList.add("active");
+
+            loadMessages();
+        }
+
+        function loadUsers() {
+            fetch("/api/users")
+                .then(res => res.json())
+                .then(users => {
+                    userList.innerHTML = "";
+                    users.forEach(u => {
+                        const div = document.createElement("div");
+                        div.className = "user-item";
+                        div.textContent = u.username;
+                        if (u.id === selectedUserId) div.classList.add("active");
+                        div.addEventListener("click", () => selectUser(u.id, u.username, div));
+                        userList.appendChild(div);
+                    });
+                });
+        }
+
+        function loadMessages() {
+            if (!selectedUserId) return;
+            fetch("/api/messages/" + selectedUserId)
+                .then(res => res.json())
+                .then(msgs => {
+                    messagesBox.innerHTML = "";
+                    msgs.forEach(m => {
+                        const div = document.createElement("div");
+                        div.className = "message " + (m.sender_name === currentUsername ? "mine" : "theirs");
+                        div.innerHTML = "<div class='text'></div><div class='time'>" + m.created_at + "</div>";
+                        div.querySelector(".text").textContent = m.text;
+                        messagesBox.appendChild(div);
+                    });
+                    messagesBox.scrollTop = messagesBox.scrollHeight;
+                });
+        }
+
+        sendForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const text = messageInput.value.trim();
+            if (!text || !selectedUserId) return;
+
+            fetch("/api/send", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({receiver_id: selectedUserId, text: text})
+            }).then(() => {
+                messageInput.value = "";
+                loadMessages();
+            });
+        });
+
+        loadUsers();
+        setInterval(loadUsers, 3000);
+        setInterval(loadMessages, 2000);
+    </script>
+</body>
+</html>
